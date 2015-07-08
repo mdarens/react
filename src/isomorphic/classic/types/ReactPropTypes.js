@@ -212,6 +212,15 @@ function createEnumTypeChecker(expectedValues) {
   function validate(props, propName, componentName, location, propFullName) {
     var propValue = props[propName];
     for (var i = 0; i < expectedValues.length; i++) {
+      if (expectedValues[i] !== null &&
+      (typeof expectedValues[i] === "object" || typeof expectedValues[i] === "function")
+      ) {
+        return new Error(
+          `Invalid assertion in \`propTypes\` of \`${componentName}\`. ` +
+          `\`oneOf\` expects an enum of primitive values. Did you mean to use \`oneOfType\`?`
+        );
+      }
+      
       if (propValue === expectedValues[i]) {
         return null;
       }
